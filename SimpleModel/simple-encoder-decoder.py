@@ -4,16 +4,18 @@ from __future__ import print_function
 from data_generators import generate_copy_task, generate_single_task
 from keras.models import Model
 from keras.layers import Input, LSTM, Dense
+from keras.optimizers import SGD, Adam
 import numpy as np
 from random import randint
 
 # Hyperparams here
+lr = 1e-2 # Learning rate
 batch_size = 64  # Batch size for training.
-epochs = 10  # Number of epochs to train for.
+epochs = 50  # Number of epochs to train for.
 latent_dim = 256  # Latent dimensionality of the encoding space.
 num_samples = 10000  # Number of samples to train on.
-length = 8 # The length of each sequence
-max_val = 5 # Maximum value in the sequence
+length = 15 # The length of each sequence
+max_val = 10 # Maximum value in the sequence
 
 # Data generators
 X, y = generate_copy_task(length, num_samples, max_val)
@@ -44,7 +46,8 @@ model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
 
 model.summary()
 
-model.compile(optimizer='rmsprop', loss='mse')
+optimizer = Adam(lr)
+model.compile(optimizer=optimizer, loss='mse')
 model.fit([encoder_input_data, decoder_input_data], decoder_target_data,
           batch_size=batch_size,
           epochs=epochs,
@@ -84,5 +87,5 @@ input_str = ''
 inf_input_t = inf_input[:, 1:, :].tolist()[0]
 for i in inf_input_t:
     input_str += str(i[0]) + ' '
-print(input_str)
-print(pred)
+print('Query sequence: ' + input_str)
+print('Predi sequence: ' + pred)
