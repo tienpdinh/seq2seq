@@ -9,11 +9,11 @@ from random import randint
 
 # Hyperparams here
 batch_size = 64  # Batch size for training.
-epochs = 15  # Number of epochs to train for.
+epochs = 10  # Number of epochs to train for.
 latent_dim = 256  # Latent dimensionality of the encoding space.
 num_samples = 10000  # Number of samples to train on.
 length = 8 # The length of each sequence
-max_val = 10 # Maximum value in the sequence
+max_val = 5 # Maximum value in the sequence
 
 # Data generators
 X, y = generate_copy_task(length, num_samples, max_val)
@@ -73,7 +73,7 @@ def decode_sequence(input_seq):
     for _ in range(length - 1):
         outputs, h, c = decoder_model.predict(
             [target_seq] + states_value)
-        decoded_seq += str(int(outputs[0, 0, 0])) + ' '
+        decoded_seq += str(int(round(outputs[0, 0, 0]))) + ' '
         target_seq[0, 0, 0] = outputs[0, 0, 0]
         states_value = [h, c]
     return decoded_seq
