@@ -1,2 +1,3 @@
 # Seq2Seq
-* SimpleModel is an encoder-decoder model which takes a sequence of ints as input and outputs an identical sequence.
+* `simple-encoder-decoder.py` is an encoder-decoder model which takes a sequence of ints as input and outputs an identical sequence.
+* `autoencoder.py` does the same task as above but with attention mechanism.
