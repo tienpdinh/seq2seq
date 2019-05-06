@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.random import randint
 
-def generate_copy_task(length, samples, max_val):
+def generate_copy_task(length, samples, max_val, reverse=False):
     """
     Generate copies of encoder input and decoder target that are identical
     :param length: The length of each sequence
@@ -12,7 +12,7 @@ def generate_copy_task(length, samples, max_val):
     y = []
     for _ in range(samples):
         X_i = [[randint(0, max_val)] for _ in range(length)]
-        y_i = X_i.copy()
+        y_i = X_i.copy() if not reverse else X_i.copy()[::-1]
         X.append(X_i)
         y.append(y_i)
     return X, y

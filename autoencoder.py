@@ -12,10 +12,12 @@ batch_size = 64
 epochs = 15
 latent_dim = 256
 num_samples = 10000
-length = 20
-max_val = 20
+length = 30
+max_val = 30
 
 # Data generating
+# Reverse sequence generating works but the order is a little bit off
+# since the inference code is designed for forward prediction.
 X, y = generate_copy_task(length, num_samples, max_val)
 encoder_input_data = one_hot_encode(np.array(X), max_val)
 decoder_input_data = one_hot_encode(np.array(y), max_val)
