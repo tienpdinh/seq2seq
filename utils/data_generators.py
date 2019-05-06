@@ -1,5 +1,5 @@
 import numpy as np
-from random import randint
+from numpy.random import randint
 
 def generate_copy_task(length, samples, max_val):
     """
@@ -28,11 +28,9 @@ def generate_single_task(length, samples, max_val, return_index=0):
         y.append(y_i)
     return X, y
 
-def one_hot_encode(tensor, max_val=None):
+def one_hot_encode(tensor, max_val):
     # Shape should be (batch * sample * elements)
     assert len(tensor.shape) == 3
-    if max_val is None:
-        max_val = max(tensor)
     tensor_shape = tensor.shape
     encoded_tensor = np.zeros((tensor_shape[0], tensor_shape[1], max_val))
     for i in range(tensor_shape[0]):
