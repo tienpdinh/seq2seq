@@ -1,7 +1,8 @@
+# TODO: Switch to one_hot_encode, implement with argparse
 from __future__ import absolute_import
 from __future__ import print_function
 
-from data_generators import generate_copy_task, generate_single_task
+from utils.data_generators import generate_copy_task, generate_single_task
 from keras.models import Model
 from keras.layers import Input, LSTM, Dense
 from keras.optimizers import SGD, Adam
