@@ -15,8 +15,8 @@ print('Sit back, and relax, it will take a while')
 for length in tqdm(range(MIN_LENGTH, MAX_LENGTH+1)):
     attend_model = EncoderDecoderCopy(length=length)
     simple_model = EncoderDecoderSimple(length=length)
-    attend_history = attend_model.train(epochs=1, verbose=0)
-    simple_history = simple_model.train(epochs=1, verbose=0)
+    attend_history = attend_model.train(epochs=6, verbose=0)
+    simple_history = simple_model.train(epochs=6, verbose=0)
     attend_acc.append(max(attend_history.history['val_acc']))
     simple_acc.append(max(simple_history.history['val_acc']))
 
