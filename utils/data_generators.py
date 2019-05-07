@@ -15,7 +15,7 @@ def generate_copy_task(length, samples, max_val, reverse=False):
         y_i = X_i.copy() if not reverse else X_i.copy()[::-1]
         X.append(X_i)
         y.append(y_i)
-    return X, y
+    return np.array(X), np.array(y)
 
 def generate_single_task(length, samples, max_val, return_index=0):
     assert return_index < length
@@ -23,10 +23,10 @@ def generate_single_task(length, samples, max_val, return_index=0):
     y = []
     for _ in range(samples):
         X_i = [[randint(0, max_val)] for _ in range(length)]
-        y_i = [[X_i[return_index]]]
+        y_i = [X_i[return_index]]
         X.append(X_i)
         y.append(y_i)
-    return X, y
+    return np.array(X), np.array(y)
 
 def one_hot_encode(tensor, max_val):
     # Shape should be (batch * sample * elements)

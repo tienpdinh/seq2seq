@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from utils.data_generators import generate_copy_task, one_hot_encode
-from keras.layers import Activation, dot, concatenate, Input, LSTM, Dense, TimeDistributed
+from utils.data_generators import generate_copy_task, generate_single_task, one_hot_encode
 from keras.models import Model
+from keras.layers import Input, LSTM, Dense, TimeDistributed
 from keras.optimizers import SGD, Adam
 import numpy as np
 
-class EncoderDecoderCopy:
+class EncoderDecoderSimple:
 
     def __init__(self, latent_dim=256, num_samples=10000, length=20, max_val=30):
         X, y = generate_copy_task(length, num_samples, max_val)
@@ -23,24 +23,17 @@ class EncoderDecoderCopy:
 
     def _init_model(self):
         encoder_inputs = Input(shape=(None, self.max_val))
-        encoder = LSTM(self.latent_dim, return_state=True, return_sequences=True)
+        encoder = LSTM(self.latent_dim, return_state=True)
         encoder_outputs, state_h, state_c = encoder(encoder_inputs)
         encoder_states = [state_h, state_c]
         
         decoder_inputs = Input(shape=(None, self.max_val))
         decoder = LSTM(self.latent_dim, return_sequences=True, return_state=True)
         decoder_outputs, _, _ = decoder(decoder_inputs, initial_state=encoder_states)
+        decoder_dense = TimeDistributed(Dense(self.max_val, activation='softmax'))
+        decoder_outputs = decoder_dense(decoder_outputs)
 
-        # Attention mechanism with dot based scoring
-        attention = dot([decoder_outputs, encoder_outputs], axes=[2, 2])
-        attention = Activation('softmax', name='attention')(attention)
-
-        context = dot([attention, encoder_outputs], axes=[2, 1])
-        decoder_combined_context = concatenate([context, decoder_outputs])
-
-        output = TimeDistributed(Dense(self.max_val, activation='softmax'))(decoder_combined_context)
-        
-        model = Model([encoder_inputs, decoder_inputs], output)
+        model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
         return model
 
     def train(self, lr=1e-2, batch_size=64, epochs=10, verbose=1):
