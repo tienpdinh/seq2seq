@@ -41,6 +41,14 @@ class EncoderDecoderCopy:
         output = TimeDistributed(Dense(self.max_val, activation='softmax'))(decoder_combined_context)
         
         model = Model([encoder_inputs, decoder_inputs], output)
+        attention_layer = model.get_layer('attention')
+        model_attention = Model(model.inputs, model.outputs + [attention_layer.output])
+        return model
+
+    def get_attention_model(self):
+        attention_layer = self.model.get_layer('attention')
+        model = Model(inputs=self.model.inputs,
+                      outputs=self.model.outputs + [attention_layer.output])
         return model
 
     def train(self, lr=1e-2, batch_size=64, epochs=10, verbose=1):
