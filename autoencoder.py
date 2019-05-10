@@ -9,8 +9,8 @@ import numpy as np
 
 class EncoderDecoderCopy:
 
-    def __init__(self, latent_dim=256, num_samples=10000, length=20, max_val=30):
-        X, y = generate_copy_task(length, num_samples, max_val)
+    def __init__(self, latent_dim=256, num_samples=10000, length=20, max_val=30, reverse=False, reverse_half=False):
+        X, y = generate_copy_task(length, num_samples, max_val, reverse, reverse_half)
         self.encoder_input_data = one_hot_encode(X, max_val)
         self.decoder_input_data = one_hot_encode(y, max_val)
         self.decoder_target_data = np.zeros_like(self.decoder_input_data)
